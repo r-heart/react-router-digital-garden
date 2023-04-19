@@ -1,8 +1,8 @@
-import { useState } from "react";
 import { TextInput } from "../components/form";
+import useRegistering from "../hooks/useRegistering";
 
 export default function LoginRegister() {
-  const [isRegistering, setIsRegistering] = useState(true);
+  const [isRegistering, setIsRegistering] = useRegistering(true);
 
   return (
     <form
