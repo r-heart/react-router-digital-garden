@@ -2,7 +2,7 @@ import { TextInput } from "../components/form";
 import useRegistering from "../hooks/useRegistering";
 
 export default function LoginRegister() {
-  const [isRegistering, setIsRegistering] = useRegistering(true);
+  const [isRegistering, setIsRegistering] = useRegistering();
 
   return (
     <form
