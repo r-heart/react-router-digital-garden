@@ -13,9 +13,6 @@ export default function LoginRegister() {
     >
       <h2>{isRegistering ? "Register" : "Login"}</h2>
 
-      {/* Conditional Rendering (https://react.dev/learn/conditional-rendering) */}
-      {isRegistering && <TextInput id="name" placeholder="Your Full Name" />}
-
       <TextInput id="username" />
       <TextInput type="password" id="password" />
       {isRegistering && (
