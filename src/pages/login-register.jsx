@@ -17,7 +17,7 @@ export default function LoginRegister() {
       <TextInput type="password" id="password" />
       {isRegistering && (
         <TextInput
-          id="confirm-password"
+          id="confirmed-password"
           type="password"
           // Don't require the confirm password field. We will be checking it in 'handleSubmit' anyway.
           required={false}
