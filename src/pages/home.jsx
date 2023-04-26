@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Loading from "../components/loading";
 import ThoughtList from "../components/thoughts/thought-list";
 import apiService from "../services/api";
 
@@ -9,9 +10,5 @@ export default function Home() {
     apiService.indexThoughts().then((data) => setThoughts(data));
   }, []);
 
-  return thoughts ? (
-    <ThoughtList items={thoughts} />
-  ) : (
-    <p>Loading Thought 💭 Garden...</p>
-  );
+  return thoughts ? <ThoughtList items={thoughts} /> : <Loading />;
 }
