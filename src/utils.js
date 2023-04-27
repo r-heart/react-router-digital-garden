@@ -1,7 +1,9 @@
 export const decodeUserFromTokenCookie = () => {
   const token = document.cookie
     .split(";")
-    .some((item) => item.trim().startsWith(name + "="));
+    .map((item) => item.trim())
+    .find((item) => item.startsWith("token="))
+    .slice(6);
 
   // Decode the token
   // https://developer.mozilla.org/en-US/docs/Web/API/atob
@@ -9,8 +11,7 @@ export const decodeUserFromTokenCookie = () => {
 
   // Check if the token has expired
   return decoded?.exp > Math.floor(Date.now() / 1000)
-    ? // Server encodes 'user' object in the token - that's what we care about
-      decoded.user
+    ? decoded.data.username
     : null;
 };
 
@@ -19,6 +20,7 @@ export const setTokenCookie = (token) => {
   const expirationDate = new Date();
   expirationDate.setTime(expirationDate.getTime() + 365 * 24 * 60 * 60 * 1000);
 
+  // https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie#write_a_new_cookie
   document.cookie =
     "token=" +
     token +
