@@ -1,6 +1,8 @@
 import ky from "ky";
 
 const authAPI = ky.create({
+  // Hooks allow modifications during the request lifecycle. Hook functions may be async and are run serially.
+  // These are 'ky' 🪝 hooks, not React hooks.
   hooks: {
     //  https://github.com/sindresorhus/ky#hooksbeforeerror
     beforeError: [
