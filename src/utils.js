@@ -1,87 +1,67 @@
-import ky from "ky";
-import {
-  decodeUserFromTokenCookie,
-  getCurrentDateTime,
-  getTokenCookie,
-} from "../utils";
+export const decodeUserFromTokenCookie = () => {
+  const token = getTokenCookie();
 
-const authAPI = ky.create({
-  // Hooks allow modifications during the request lifecycle. Hook functions may be async and are run serially.
-  // These are 'ky' 🪝 hooks, not React hooks.
-  hooks: {
-    //  https://github.com/sindresorhus/ky#hooksbeforeerror
-    beforeError: [
-      async (error) => {
-        /**
-         * If the request received a response,
-         * the error will be of type HTTPError and the Response object will be available at error.response.
-         * https://github.com/sindresorhus/ky#hooksbeforeretry
-         */
-        const { response } = error;
-        if (response && response.body) {
-          // Server sets `message` property on error.
-          const { message } = await response.json();
-          throw new Error(
-            `Authentication Error: ${message} (${response.status})`
-          );
-        }
+  // Decode the token
+  // https://developer.mozilla.org/en-US/docs/Web/API/atob
+  const decoded = token ? JSON.parse(atob(token.split(".")[1])) : null;
 
-        throw error;
-      },
-    ],
-  },
-});
+  // Check if the token has expired
+  return decoded?.exp > Math.floor(Date.now() / 1000)
+    ? decoded.data.username
+    : null;
+};
 
-export default {
-  async createThought(thought) {
-    /**
-     * In real life, the server would manage JWT security as part of the request.
-     * Here, we are doing this separately as we are managing data via JSON Server.
-     */
-    const validToken = await authAPI
-      .post(`http://localhost:3000/users/verify`, {
-        json: { token: getTokenCookie() },
-      })
-      .json();
+export const getCurrentDateTime = () => {
+  const timestamp = Date.now();
+  const currentDate = new Date(timestamp);
 
-    if (!validToken) {
-      // This will be caught by React and we can clean up context and send the user to login.
-      throw new Error("Invalid token");
-    }
+  const options = { month: "2-digit", day: "2-digit", year: "numeric" };
+  const formattedDate = currentDate.toLocaleDateString("en-US", options);
 
-    return authAPI
-      .post(`http://localhost:3001/thoughts`, {
-        json: {
-          ...thought,
-          author: decodeUserFromTokenCookie(),
-          ...getCurrentDateTime(),
-        },
-      })
-      .json();
-  },
-  indexThoughts() {
-    return ky.get(`http://localhost:3001/thoughts`).json();
-  },
-  async showThoughts(author) {
-    const allThoughts = await this.indexThoughts();
-    const thoughts4Author = allThoughts.filter(
-      (thought) => thought.author === author
-    );
+  const hours = currentDate.getHours();
+  const minutes = currentDate.getMinutes();
+  const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}`;
 
-    if (!thoughts4Author.length) {
-      throw new Error("No thoughts found");
-    }
+  return {
+    date: formattedDate,
+    time: formattedTime,
+  };
+};
 
-    return thoughts4Author;
-  },
-  registerUser(newUser) {
-    return authAPI
-      .post(`http://localhost:3000/users/register`, { json: newUser })
-      .json();
-  },
-  loginUser(user) {
-    return authAPI
-      .post(`http://localhost:3000/users/login`, { json: user })
-      .json();
-  },
+export const getTokenCookie = () => {
+  return (
+    document.cookie
+      .split(";")
+      .map((item) => item.trim())
+      .find((item) => item.startsWith("token="))
+      // `slice` 'token=' off the beginning (if we find it).
+      ?.slice(6)
+  );
+};
+
+export const setTokenCookie = (token) => {
+  // Set the token as a cookie with a one-year expiration
+  const expirationDate = new Date();
+  expirationDate.setTime(expirationDate.getTime() + 365 * 24 * 60 * 60 * 1000);
+
+  // https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie#write_a_new_cookie
+  document.cookie =
+    "token=" +
+    token +
+    "; path=/; expires=" +
+    expirationDate.toUTCString() +
+    "; SameSite=Lax";
+};
+
+export const validateRegistrationPasswords = (password, confirmedPassword) => {
+  const errors = [];
+
+  if (password.length < 8)
+    errors.push("Password must be at least 8 characters.");
+
+  if (password !== confirmedPassword) errors.push("Passwords do not match.");
+
+  if (errors.length) throw new Error(errors.join("\n"));
 };
