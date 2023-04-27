@@ -1,5 +1,6 @@
 import camelCase from "lodash.camelcase";
 import capitalize from "lodash.capitalize";
+import startCase from "lodash.startcase";
 
 export default function TextArea({ id, label, minLength = 140, placeholder }) {
   return (
@@ -10,7 +11,7 @@ export default function TextArea({ id, label, minLength = 140, placeholder }) {
       <textarea
         id={id}
         name={camelCase(id)}
-        placeholder={placeholder || id}
+        placeholder={placeholder || label || startCase(id)}
         minLength={minLength}
       />
     </div>
