@@ -4,8 +4,8 @@ export default function Thought({ thought }) {
       {thought.thought}
       <small className="block space-x-2 italic">
         <span>{thought.author}</span>
-        <span>{thought.date}</span>
-        <span>{thought.time}</span>
+        <time>{thought.date}</time>
+        <time>{thought.time}</time>
       </small>
     </li>
   );
