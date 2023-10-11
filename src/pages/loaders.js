@@ -1,5 +1,5 @@
 import { defer } from "react-router-dom";
-import apiService from "../services/apiService";
+import apiService from "../services/api.js";
 
 export const loadThoughts = () => {
   const thoughts = apiService.indexThoughts();
