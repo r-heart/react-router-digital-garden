@@ -15,7 +15,13 @@ const router = createBrowserRouter(
       <Route path-="" element={<Home />} loader={loadThoughts} />
       <Route path="about" element={<About />} />
       <Route path="contact" element={<Contact />} />
-      <Route path="login" element={<LoginRegister />} />
+      <Route
+        path="login"
+        element={<LoginRegister />}
+        action={() => {
+          console.log("form submitted!");
+        }}
+      />
       {/* TODO: Add a `404` page */}
       <Route path="★" element={<Error />} />
     </Route>

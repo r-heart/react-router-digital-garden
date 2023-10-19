@@ -1,16 +1,12 @@
 import { TextInput } from "../components/form";
 import useRegistering from "../hooks/useRegistering";
+import { Form } from "react-router-dom";
 
 export default function LoginRegister() {
   const [isRegistering, setIsRegistering] = useRegistering();
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        console.log("submitted!");
-      }}
-    >
+    <Form method="post">
       <h2>{isRegistering ? "Register" : "Login"}</h2>
 
       <TextInput id="username" />
@@ -35,6 +31,6 @@ export default function LoginRegister() {
       >
         {isRegistering ? "Already have an account?" : "Don't have an account?"}
       </button>
-    </form>
+    </Form>
   );
 }
