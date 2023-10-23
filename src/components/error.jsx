@@ -7,7 +7,7 @@ export default function Error() {
   const error = asyncError || routeError;
 
   return (
-    <p className="mt-8 rounded-md bg-red-100 px-4 py-2 text-red-700">
+    <p className="error">
       {(error?.message || "An error occurred") + "!"}
       <Link to="/" className="text-red-799 ml-4 hover:text-red-500">
         Go Home 🏠. <div className=""></div>
