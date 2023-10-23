@@ -7,6 +7,8 @@ export const registerOrLogin = async ({ request }) => {
 
   console.log(submittedUser);
 
-  const stuff = await api.registerUser(submittedUser);
-  console.log(stuff);
+  const { token } = await api.registerUser(submittedUser);
+  console.log(token);
+
+  return token;
 };
