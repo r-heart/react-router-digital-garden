@@ -1,8 +1,12 @@
+import { Form, useActionData } from "react-router-dom";
 import { TextInput } from "../components/form";
 import useRegistering from "../hooks/useRegistering";
-import { Form } from "react-router-dom";
 
 export default function LoginRegister() {
+  const error = useActionData();
+
+  console.log(error, "error");
+
   const [isRegistering, setIsRegistering] = useRegistering();
 
   return (
