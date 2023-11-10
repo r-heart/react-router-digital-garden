@@ -1,14 +1,17 @@
+import { redirect } from "react-router-dom";
 import api from "../services/api";
 import { setTokenCookie } from "../services/utils";
 
 export const registerOrLogin = async ({ request }) => {
   const fd = await request.formData();
   const submittedUser = Object.fromEntries(fd);
-  const { token } = await api.registerUser(submittedUser);
 
-  setTokenCookie(token);
+  try {
+    const { token } = await api.registerUser(submittedUser);
 
-  // TODO: Catch and return errors
-
-  return token;
+    setTokenCookie(token);
+    return redirect("/");
+  } catch (error) {
+    return error.message;
+  }
 };

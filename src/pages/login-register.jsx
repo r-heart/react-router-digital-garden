@@ -5,13 +5,13 @@ import useRegistering from "../hooks/useRegistering";
 export default function LoginRegister() {
   const error = useActionData();
 
-  console.log(error, "error");
-
   const [isRegistering, setIsRegistering] = useRegistering();
 
   return (
     <Form method="post">
       <h2>{isRegistering ? "Register" : "Login"}</h2>
+
+      {error && <p className="error">{error}</p>}
 
       <TextInput id="username" />
       <TextInput type="password" id="password" />
