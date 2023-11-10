@@ -1,12 +1,20 @@
 import { redirect } from "react-router-dom";
 import api from "../services/api";
-import { setTokenCookie } from "../services/utils";
+import {
+  setTokenCookie,
+  validateRegistrationPasswords,
+} from "../services/utils";
 
 export const registerOrLogin = async ({ request }) => {
   const fd = await request.formData();
   const submittedUser = Object.fromEntries(fd);
 
   try {
+    validateRegistrationPasswords(
+      submittedUser.password,
+      submittedUser.confirmedPassword
+    );
+
     const { token } = await api.registerUser(submittedUser);
 
     setTokenCookie(token);
