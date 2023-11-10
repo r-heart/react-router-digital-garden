@@ -1,17 +1,29 @@
+import { useEffect, useState } from "react";
 import { Form, useActionData } from "react-router-dom";
 import { TextInput } from "../components/form";
 import useRegistering from "../hooks/useRegistering";
 
 export default function LoginRegister() {
-  const error = useActionData();
+  const errorMessage = useActionData();
 
   const [isRegistering, setIsRegistering] = useRegistering();
 
+  const [isErrorShown, setIsErrorShown] = useState(false);
+
+  useEffect(() => {
+    setIsErrorShown(true);
+  }, [errorMessage]);
+
   return (
-    <Form method="post">
+    <Form
+      method="post"
+      onChange={() => {
+        setIsErrorShown(false);
+      }}
+    >
       <h2>{isRegistering ? "Register" : "Login"}</h2>
 
-      {error && <p className="error">{error}</p>}
+      {errorMessage && isErrorShown && <p className="error">{errorMessage}</p>}
 
       <TextInput id="username" />
       <TextInput type="password" id="password" />
