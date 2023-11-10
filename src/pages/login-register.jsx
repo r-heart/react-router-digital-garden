@@ -1,6 +1,6 @@
 import { Form, useNavigation } from "react-router-dom";
 import { TextInput } from "../components/form";
-import useError from "../hooks/useError";
+import useError from "../hooks/use-error";
 import useRegistering from "../hooks/useRegistering";
 
 export default function LoginRegister() {
