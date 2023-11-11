@@ -7,26 +7,25 @@ import {
 } from "../services/utils";
 
 export const mutateThought = async ({ request }) => {
+  const author = decodeUserFromTokenCookie();
   const fd = await request.formData();
 
-  switch (request.method) {
-    case "POST": {
-      const thought = fd.get("thought");
+  try {
+    switch (request.method) {
+      case "POST": {
+        const thought = fd.get("thought");
 
-      // Revalidate the user's token whenever we submit a thought
-      const author = decodeUserFromTokenCookie();
-
-      await api.addThought({ thought, author });
-      break;
+        await api.addThought({ thought, author });
+        return null;
+      }
+      case "DELETE": {
+        await api.deleteThought(Object.fromEntries(fd), author);
+        return null;
+      }
     }
-    case "DELETE": {
-      await api.deleteThought(
-        Object.fromEntries(fd),
-        decodeUserFromTokenCookie()
-      );
-    }
+  } catch (error) {
+    return error.message;
   }
-  return redirect("/");
 };
 
 export const registerOrLogin = async ({ request }) => {
