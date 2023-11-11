@@ -8,14 +8,18 @@ import {
 export const registerOrLogin = async ({ request }) => {
   const fd = await request.formData();
   const submittedUser = Object.fromEntries(fd);
+  const isRegistering = "confirmedPassword" in submittedUser;
 
   try {
-    validateRegistrationPasswords(
-      submittedUser.password,
-      submittedUser.confirmedPassword
-    );
+    if (isRegistering)
+      validateRegistrationPasswords(
+        submittedUser.password,
+        submittedUser.confirmedPassword
+      );
 
-    const { token } = await api.registerUser(submittedUser);
+    const { token } = isRegistering
+      ? await api.registerUser(submittedUser)
+      : await api.loginUser(submittedUser);
 
     setTokenCookie(token);
     return redirect("/");
