@@ -1,4 +1,5 @@
 import ky from "ky";
+import { getCurrentFormattedDateTime } from "./utils";
 
 export const AUTH_BASE_URL = "http://localhost:3000/users";
 export const THOUGHTS_BASE_URL = "http://localhost:3001/thoughts";
@@ -31,6 +32,11 @@ const authAPI = ky.create({
     ],
   },
 });
+
+function isAuthorizedToUpdateOrDeleteThought(thought, authenticatedUser) {
+  return thought.author === authenticatedUser;
+}
+
 export default {
   indexThoughts() {
     return ky.get(THOUGHTS_BASE_URL).json();
@@ -46,6 +52,34 @@ export default {
     }
 
     return thoughts4Author;
+  },
+
+  addThought(thought) {
+    const thoughtWithDateTime = {
+      ...thought,
+      ...getCurrentFormattedDateTime(),
+    };
+
+    return ky.post(THOUGHTS_BASE_URL, { json: thoughtWithDateTime }).json();
+  },
+  updateThought(updatedThought, authenticatedUser) {
+    if (
+      !isAuthorizedToUpdateOrDeleteThought(updatedThought, authenticatedUser)
+    ) {
+      throw new Error("Unauthorized to update thought");
+    }
+
+    return ky
+      .patch(`${THOUGHTS_BASE_URL}/${updatedThought.id}`, {
+        json: updatedThought,
+      })
+      .json();
+  },
+  deleteThought(thoughtId, authenticatedUser) {
+    if (!isAuthorizedToUpdateOrDeleteThought(thoughtId, authenticatedUser)) {
+      throw new Error("Unauthorized to delete thought");
+    }
+    return ky.delete(`${THOUGHTS_BASE_URL}/${thoughtId}`).json();
   },
   registerUser(newUser) {
     return authAPI.post(`${AUTH_BASE_URL}/register`, { json: newUser }).json();

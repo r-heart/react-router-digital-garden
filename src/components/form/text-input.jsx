@@ -19,7 +19,7 @@ export default function TextInput({
         type={type}
         id={id}
         name={camelCase(id)}
-        placeholder={placeholder || label || startCase(id)}
+        placeholder={placeholder || startCase(id)}
         required={required}
       />
     </div>
