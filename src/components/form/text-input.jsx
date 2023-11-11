@@ -21,6 +21,7 @@ export default function TextInput({
         name={camelCase(id)}
         placeholder={placeholder || startCase(id)}
         required={required}
+        className="w-72"
       />
     </div>
   );

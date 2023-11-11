@@ -11,9 +11,6 @@ export default function Home() {
   const [currentUser, setCurrentUser] = useOutletContext();
 
   useSetCurrentUser(setCurrentUser);
-  // useEffect(() => {
-  //   setCurrentUser(decodeUserFromTokenCookie());
-  // });
 
   return (
     <>
@@ -22,7 +19,7 @@ export default function Home() {
           <TextInput
             id="thought"
             label="Add a New Thought"
-            placeholder="What's on your mind? 🧠 "
+            placeholder={`Hi ${currentUser}, what's on your mind 🧠 ?`}
           />
           <button type="submit" className="btn">
             Add Thought
