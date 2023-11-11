@@ -6,14 +6,22 @@ import {
   validateRegistrationPasswords,
 } from "../services/utils";
 
-export const addThought = async ({ request }) => {
-  const fd = await request.formData();
-  const thought = fd.get("thought");
+export const mutateThought = async ({ request }) => {
+  switch (request.method) {
+    case "POST": {
+      const fd = await request.formData();
+      const thought = fd.get("thought");
 
-  // Revalidate the user's token whenever we submit a thought
-  const author = decodeUserFromTokenCookie();
+      // Revalidate the user's token whenever we submit a thought
+      const author = decodeUserFromTokenCookie();
 
-  await api.addThought({ thought, author });
+      await api.addThought({ thought, author });
+      break;
+    }
+    case "DELETE": {
+      const { id, author } = request.body;
+    }
+  }
   return redirect("/");
 };
 
