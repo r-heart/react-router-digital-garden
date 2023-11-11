@@ -79,7 +79,8 @@ export default {
     if (!isAuthorizedToUpdateOrDeleteThought(thought, authenticatedUser)) {
       throw new Error("Unauthorized to delete thought");
     }
-    return ky.delete(`${THOUGHTS_BASE_URL}/${thought}`).json();
+
+    return ky.delete(`${THOUGHTS_BASE_URL}/${thought.id}`).json();
   },
   registerUser(newUser) {
     return authAPI.post(`${AUTH_BASE_URL}/register`, { json: newUser }).json();

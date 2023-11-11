@@ -7,9 +7,10 @@ import {
 } from "../services/utils";
 
 export const mutateThought = async ({ request }) => {
+  const fd = await request.formData();
+
   switch (request.method) {
     case "POST": {
-      const fd = await request.formData();
       const thought = fd.get("thought");
 
       // Revalidate the user's token whenever we submit a thought
@@ -19,7 +20,10 @@ export const mutateThought = async ({ request }) => {
       break;
     }
     case "DELETE": {
-      const { id, author } = request.body;
+      await api.deleteThought(
+        Object.fromEntries(fd),
+        decodeUserFromTokenCookie()
+      );
     }
   }
   return redirect("/");
