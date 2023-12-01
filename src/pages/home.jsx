@@ -12,10 +12,19 @@ export default function Home() {
 
   useSetCurrentUser(setCurrentUser);
 
+  const handleRef = (node) => {
+    if (node) {
+      const input = node.elements.namedItem("thought");
+      if (input) {
+        input.focus();
+      }
+    }
+  };
+
   return (
     <>
       {currentUser && (
-        <Form method="post">
+        <Form method="post" ref={handleRef}>
           <TextInput
             id="thought"
             label="Add a New Thought"
