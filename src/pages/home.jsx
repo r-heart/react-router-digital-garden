@@ -43,7 +43,7 @@ export default function Home() {
             placeholder={`Hi ${currentUser}, what's on your mind 🧠 ?`}
           />
 
-          {error & isShowingError && <p className="error">{error}</p>}
+          {error && isShowingError && <p className="error">{error}</p>}
           <button type="submit" className="btn">
             Add Thought
           </button>
