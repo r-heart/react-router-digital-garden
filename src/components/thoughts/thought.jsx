@@ -1,6 +1,12 @@
-import { Link, useOutletContext, useSubmit } from "react-router-dom";
+import {
+  Link,
+  useNavigation,
+  useOutletContext,
+  useSubmit,
+} from "react-router-dom";
 
 export default function Thought({ thought }) {
+  const navigation = useNavigation();
   const [currentUser] = useOutletContext();
   const submit = useSubmit();
 
@@ -19,6 +25,7 @@ export default function Thought({ thought }) {
             </button>
             <button
               className="rounded bg-red-500 px-4 py-2"
+              disabled={navigation.state !== "idle"}
               onClick={() => {
                 submit(
                   {
