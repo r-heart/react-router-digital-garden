@@ -62,16 +62,10 @@ export default {
 
     return ky.post(THOUGHTS_BASE_URL, { json: thoughtWithDateTime }).json();
   },
-  updateThought(updatedThought, authenticatedUser) {
-    if (
-      !isAuthorizedToUpdateOrDeleteThought(updatedThought, authenticatedUser)
-    ) {
-      throw new Error("Unauthorized to update thought");
-    }
-
+  updateThought(updatedThought) {
     return ky
       .patch(`${THOUGHTS_BASE_URL}/${updatedThought.id}`, {
-        json: updatedThought,
+        json: { ...updatedThought, ...getCurrentFormattedDateTime() },
       })
       .json();
   },

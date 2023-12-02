@@ -24,8 +24,8 @@ export default function Thought({ thought, setThought2Edit }) {
               className="rounded bg-yellow-500 px-4 py-2 text-black"
               onClick={() => {
                 setThought2Edit({
-                  author: thought.author,
                   thought: thought.thought,
+                  author: thought.author,
                   id: thought.id,
                 });
               }}

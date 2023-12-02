@@ -32,13 +32,10 @@ export default function Home() {
   return (
     <>
       {currentUser && (
-        <Form
-          method="POST"
-          onSubmit={() => {
-            setIsErrorShown(false);
-          }}
-          ref={formRef}
-        >
+        <Form method={thought2Edit ? "PUT" : "POST"} ref={formRef}>
+          {thought2Edit && (
+            <input type="hidden" name="id" value={thought2Edit.id} />
+          )}
           <TextInput
             id="thought"
             label="Add a New Thought"
@@ -48,7 +45,7 @@ export default function Home() {
 
           {error && isErrorShown && <p className="error">{error}</p>}
           <button type="submit" className="btn" disabled={!isIdle}>
-            Add Thought
+            {thought2Edit ? "Edit" : "Add"} Thought
           </button>
         </Form>
       )}
