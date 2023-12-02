@@ -1,4 +1,4 @@
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 import {
   Await,
   Form,
@@ -10,22 +10,21 @@ import Error from "../components/error";
 import { TextInput } from "../components/form";
 import Loading from "../components/loading";
 import ThoughtList from "../components/thoughts/thought-list";
-import useClearAndFocus from "../hooks/use-clear-and-focus.js";
 import useError from "../hooks/use-error";
+import useForm from "../hooks/use-form.js";
 import useSetCurrentUser from "../hooks/use-set-current-user";
 
 export default function Home() {
-  const [thought2Edit, setThought2Edit] = useState();
   const { thoughts } = useLoaderData();
   const navigation = useNavigation();
   const [currentUser, setCurrentUser] = useOutletContext();
 
-  const { error, isErrorShown, setIsErrorShown } = useError();
+  const { error, isErrorShown } = useError();
   useSetCurrentUser(setCurrentUser);
 
   const isIdle = navigation.state === "idle";
 
-  const formRef = useClearAndFocus(error, isIdle);
+  const { formRef, thought2Edit, setThought2Edit } = useForm(error, isIdle);
 
   const { thought } = thought2Edit || {};
 
