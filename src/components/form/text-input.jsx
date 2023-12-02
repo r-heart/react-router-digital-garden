@@ -7,6 +7,7 @@ export default function TextInput({
   id,
   label,
   placeholder,
+  defaultValue,
   required = true,
   type = "text",
 }) {
@@ -22,6 +23,7 @@ export default function TextInput({
         placeholder={placeholder || startCase(id)}
         required={required}
         className="w-72"
+        defaultValue={defaultValue}
       />
     </div>
   );

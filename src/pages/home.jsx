@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import {
   Await,
   Form,
@@ -15,17 +15,19 @@ import useError from "../hooks/use-error";
 import useSetCurrentUser from "../hooks/use-set-current-user";
 
 export default function Home() {
+  const [thought2Edit, setThought2Edit] = useState();
   const { thoughts } = useLoaderData();
   const navigation = useNavigation();
   const [currentUser, setCurrentUser] = useOutletContext();
 
+  const { error, isErrorShown, setIsErrorShown } = useError();
   useSetCurrentUser(setCurrentUser);
-
-  const { error, isShowingError, setIsShowingError } = useError();
 
   const isIdle = navigation.state === "idle";
 
   const formRef = useClearAndFocus(error, isIdle);
+
+  const { thought } = thought2Edit || {};
 
   return (
     <>
@@ -33,7 +35,7 @@ export default function Home() {
         <Form
           method="POST"
           onSubmit={() => {
-            setIsShowingError(false);
+            setIsErrorShown(false);
           }}
           ref={formRef}
         >
@@ -41,10 +43,11 @@ export default function Home() {
             id="thought"
             label="Add a New Thought"
             placeholder={`Hi ${currentUser}, what's on your mind 🧠 ?`}
+            defaultValue={thought}
           />
 
-          {error && isShowingError && <p className="error">{error}</p>}
-          <button type="submit" className="btn">
+          {error && isErrorShown && <p className="error">{error}</p>}
+          <button type="submit" className="btn" disabled={!isIdle}>
             Add Thought
           </button>
         </Form>
@@ -52,7 +55,7 @@ export default function Home() {
       <Suspense fallback={<Loading />}>
         <Await resolve={thoughts} errorElement={<Error />}>
           <h1>{currentUser}</h1>
-          <ThoughtList />
+          <ThoughtList setThought2Edit={setThought2Edit} />
         </Await>
       </Suspense>
     </>
